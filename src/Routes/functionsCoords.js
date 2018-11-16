@@ -9,23 +9,23 @@ const list = params => Observable.create( observer => {
 })
 
 const getById = uuid => Observable.create( observer => {
-	observer.next({getById: true})
+    //observer.next(null)
+    observer.next({data: 3})
     observer.complete()
 })
 
-const create =  data => Observable.create( observer => {
-    console.log(data)
-	observer.next({create: true})
+const create = data => Observable.create( observer => {
+	observer.next(data)
     observer.complete()
 })
 
 const update = (uuid, data) => Observable.create( observer => {
-	observer.next({update: true})
+	observer.next({uuid, data})
     observer.complete()
 })
 
-const remove =  uuid => Observable.create( observer => {
-	observer.next({remove: true})
+const remove = uuid => Observable.create( observer => {
+	observer.next({data: 2})
     observer.complete()
 })
 

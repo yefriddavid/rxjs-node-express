@@ -44,16 +44,20 @@ describe('GET, POST, PUT, DELETE /coords', function () {
 
     it('Create coord', function (done) {
 
-        getCoordsStub.returns({lat: 1, long: 1})
+        const formData = {lat: '1', long: '2'}
+        getCoordsStub.returns(null)
 
-        create({data: "seeeee"}).subscribe( res => {
+        create(formData).subscribe( res => {
             const coords = JSON.parse(JSON.stringify(res))
             request
-              .post('/coord')
-              .expect('Content-Type', /json/)
-              .expect(200, function (err, res) {
+                .post('/coord')
+                .type('form')
+                .send(formData)
+                .set('Accept', /application\/json/)
+                .expect('Content-Type', /json/)
+                .expect(200, function (err, res) {
                 expect(res.body).to.deep.equal({
-                  status: 'ok',
+                    status: 'ok',
                     data: coords
                 })
                 done()
@@ -63,16 +67,21 @@ describe('GET, POST, PUT, DELETE /coords', function () {
 
     it('Update coord', function (done) {
 
-        getCoordsStub.returns({uuid: 1})
+        const params = { uuid: '1' }
+        const formData = { lat: '1', long: '2' }
+        getCoordsStub.returns(params)
 
-        update({}).subscribe( res => {
+        update(params.uuid, formData).subscribe( res => {
             const coords = JSON.parse(JSON.stringify(res))
             request
-                .put('/coord/:uuid')
-              .expect('Content-Type', /json/)
-              .expect(200, function (err, res) {
+                .put('/coord/1')
+                .expect('Content-Type', /json/)
+                .type('form')
+                .send(formData)
+                .set('Accept', /application\/json/)
+                .expect(200, function (err, res) {
                 expect(res.body).to.deep.equal({
-                  status: 'ok',
+                    status: 'ok',
                     data: coords
                 })
                 done()
@@ -81,11 +90,12 @@ describe('GET, POST, PUT, DELETE /coords', function () {
     })
 
     it('Remove coord', function (done) {
-        getCoordsStub.returns({uuid: 1})
-        remove({}).subscribe( res => {
+        const params = { uuid: '1' }
+        getCoordsStub.returns(params)
+        remove(params).subscribe( res => {
             const coords = JSON.parse(JSON.stringify(res))
             request
-                .delete('/coord/:uuid')
+                .delete('/coord/1')
               .expect('Content-Type', /json/)
               .expect(200, function (err, res) {
                 expect(res.body).to.deep.equal({
@@ -97,16 +107,18 @@ describe('GET, POST, PUT, DELETE /coords', function () {
         })
     })
     it('Get coord by id', function (done) {
-        getCoordsStub.returns({uuid: 1})
-        getById({}).subscribe( res => {
-            const coords = JSON.parse(JSON.stringify(res))
+        const params = { uuid: '1' }
+        getCoordsStub.returns(params)
+        getById(params).subscribe( res => {
+            const coord = JSON.parse(JSON.stringify(res))
             request
-                .get('/coord/:uuid')
-              .expect('Content-Type', /json/)
-              .expect(200, function (err, res) {
+                .get('/coord/1')
+                .expect('Content-Type', /json/)
+                .expect(200, function (err, res) {
+                  //console.log(res.body)
                 expect(res.body).to.deep.equal({
-                  status: 'ok',
-                    data: coords
+                    status: 'ok',
+                    data: coord
                 })
                 done()
             })
