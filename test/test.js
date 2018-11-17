@@ -1,5 +1,10 @@
-const { Subject } = require("rxjs")
+const { Subject, Observable } = require("rxjs")
 
+
+const source2 = Observable.create( observer => {
+
+    console.log
+})
 
 
 const source = new Subject()
@@ -13,7 +18,7 @@ source.subscribe( args => {
 })
 
 
-source.next({a:1, b:2})
+source2.next({a:1, b:2})
 
 
 
